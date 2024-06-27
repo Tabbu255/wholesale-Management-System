@@ -1,0 +1,81 @@
+Create Buyers Table
+CREATE TABLE Buyers (
+    BuyerID INT AUTO_INCREMENT PRIMARY KEY,
+    BuyerName VARCHAR(100) NOT NULL,
+    ContactInfo VARCHAR(100),
+    Address VARCHAR(255)
+);
+
+-- Create Customers Table
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL,
+    ContactInfo VARCHAR(100),
+    Address VARCHAR(255)
+);
+
+-- Create Stock Table
+CREATE TABLE Stock (
+    StockID INT AUTO_INCREMENT PRIMARY KEY,
+    ItemName VARCHAR(100) NOT NULL,
+    Quantity INT NOT NULL,
+    PurchasePrice DECIMAL(10, 2) NOT NULL,
+    SellingPrice DECIMAL(10, 2) NOT NULL,
+    BuyerID INT,
+    FOREIGN KEY (BuyerID) REFERENCES Buyers(BuyerID)
+);
+
+-- Create Payments Table
+CREATE TABLE Payments (
+    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT,
+    Amount DECIMAL(10, 2) NOT NULL,
+    PaymentDate DATE NOT NULL,
+    Status ENUM('Paid', 'Pending') NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+-- Create MonthlyProfit Table
+CREATE TABLE MonthlyProfit (
+    ProfitID INT AUTO_INCREMENT PRIMARY KEY,
+    Month VARCHAR(20) NOT NULL,
+    Year INT NOT NULL,
+    TotalIncome DECIMAL(10, 2) NOT NULL,
+    TotalExpense DECIMAL(10, 2) NOT NULL,
+    NetProfit DECIMAL(10, 2) NOT NULL
+);
+
+-- Insert Data into Buyers Table
+INSERT INTO Buyers (BuyerName, ContactInfo, Address) VALUES
+('Buyer One', '123-456-7890', '123 Buyer St'),
+('Buyer Two', '987-654-3210', '456 Buyer Ave');
+
+-- Insert Data into Customers Table
+INSERT INTO Customers (CustomerName, ContactInfo, Address) VALUES
+('Customer One', '111-222-3333', '123 Customer Rd'),
+('Customer Two', '444-555-6666', '456 Customer Blvd');
+
+-- Insert Data into Stock Table
+INSERT INTO Stock (ItemName, Quantity, PurchasePrice, SellingPrice, BuyerID) VALUES
+('Item One', 100, 50.00, 70.00, 1),
+('Item Two', 200, 30.00, 50.00, 2);
+
+-- Insert Data into Payments Table
+INSERT INTO Payments (CustomerID, Amount, PaymentDate, Status) VALUES
+(1, 1400.00, '2024-06-01', 'Paid'),
+(2, 1000.00, '2024-06-10', 'Pending');
+
+-- Insert Data into MonthlyProfit Table
+INSERT INTO MonthlyProfit (Month, Year, TotalIncome, TotalExpense, NetProfit) VALUES
+('June', 2024, 2400.00, 1600.00, 800.00);
+
+-- Sample Queries
+
+-- Retrieve all stock details
+SELECT * FROM Stock;
+
+-- Get details of payments that are pending
+SELECT * FROM Payments WHERE Status = 'Pending';
+
+-- Calculate the monthly profit for a specific month
+SELECT NetProfit FROM MonthlyProfit WHERE Month = 'June' AND Year = 2024;
